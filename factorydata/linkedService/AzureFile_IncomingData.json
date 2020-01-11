@@ -1,6 +1,5 @@
 {
 	"name": "AzureFile_IncomingData",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "Incoming files",
 		"annotations": [],
@@ -8,7 +7,15 @@
 		"typeProperties": {
 			"host": "\\\\stornwrawdata.file.core.windows.net\\incomingdata",
 			"userId": "AZURE\\stornwrawdata",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRGLU5XLVdBUkVIT1VTRV8wNDg0YzhhMS1iYWVkLTQ5MzMtODJiNi0yM2JhOTM5MThkMjciDQp9"
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault_NW",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "stornwrawdata-key"
+			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
