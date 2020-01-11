@@ -1,0 +1,12 @@
+{
+	"name": "AzureTable_Order_Detail",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureTableStorage_NWData",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureTable",
+		"schema": []
+	}
+}
