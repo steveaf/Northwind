@@ -5,6 +5,9 @@
 			"referenceName": "AzureFile_IncomingData",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Files"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
