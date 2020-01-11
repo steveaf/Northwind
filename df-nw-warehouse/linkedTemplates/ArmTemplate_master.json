@@ -1,0 +1,70 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-nw-warehouse"
+		},
+		"AzureTableStorage_NWData_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureTableStorage_NWData'"
+		},
+		"AzureFile_IncomingData_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "\\\\stornwrawdata.file.core.windows.net\\incomingdata"
+		},
+		"AzureFile_IncomingData_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "AZURE\\stornwrawdata"
+		},
+		"AzureKeyVault_NW_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-Northwest-Traders.vault.azure.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureTableStorage_NWData_connectionString": {
+						"value": "[parameters('AzureTableStorage_NWData_connectionString')]"
+					},
+					"AzureKeyVault_NW_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault_NW_properties_typeProperties_baseUrl')]"
+					},
+					"AzureFile_IncomingData_properties_typeProperties_host": {
+						"value": "[parameters('AzureFile_IncomingData_properties_typeProperties_host')]"
+					},
+					"AzureFile_IncomingData_properties_typeProperties_userId": {
+						"value": "[parameters('AzureFile_IncomingData_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
