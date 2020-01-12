@@ -42,19 +42,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureTableStorage_NWData')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureTableStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureTableStorage_NWData_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AzureFile_IncomingData')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -77,6 +64,121 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault_NW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTableStorage_NWData')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureTableStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureTableStorage_NWData_connectionString')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault_NW",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "stornwrawdata-key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault_NW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTable_Customer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureTableStorage_NWData",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "AzureTables"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "nwCustomer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage_NWData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTable_Order')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureTableStorage_NWData",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "AzureTables"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "nwOrder"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage_NWData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTable_Order_Detail')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureTableStorage_NWData",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "AzureTables"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "nwOrderDetail"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage_NWData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTable_Product')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureTableStorage_NWData",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "AzureTables"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "nwProduct"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage_NWData')]"
 			]
 		},
 		{
@@ -428,6 +530,181 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureFile_IncomingData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Product_to_AzureTable')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureFileStorageReadSettings",
+									"recursive": false,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureTableSink",
+								"azureTableInsertType": "merge",
+								"azureTableDefaultPartitionKeyValue": {
+									"value": "@pipeline().parameters.ProductGroupID",
+									"type": "Expression"
+								},
+								"writeBatchSize": 10000
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CategoryID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CategoryID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Discontinued",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Discontinued",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProductName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "QuantityPerUnit",
+											"type": "String"
+										},
+										"sink": {
+											"name": "QuantityPerUnit",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReorderLevel",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReorderLevel",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SupplierID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SupplierID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitPrice",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UnitPrice",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitsInStock",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UnitsInStock",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitsOnOrder",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UnitsOnOrder",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "NTCL_Product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureTable_Product",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"ProductGroupID": {
+						"type": "string",
+						"defaultValue": "1"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/NTCL_Product')]",
+				"[concat(variables('factoryId'), '/datasets/AzureTable_Product')]"
 			]
 		}
 	]
