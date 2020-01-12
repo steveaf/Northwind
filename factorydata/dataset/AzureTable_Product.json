@@ -5,8 +5,14 @@
 			"referenceName": "AzureTableStorage_NWData",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "AzureTables"
+		},
 		"annotations": [],
 		"type": "AzureTable",
-		"schema": []
+		"schema": [],
+		"typeProperties": {
+			"tableName": "nwProduct"
+		}
 	}
 }
