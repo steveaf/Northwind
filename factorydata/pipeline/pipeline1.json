@@ -37,9 +37,35 @@
 						"mappings": [
 							{
 								"source": {
-									"name": ""
+									"name": "ProductID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PartitionKey",
+									"type": "String"
 								}
-							}
+							},
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RowKey",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SupplierID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Timestamp",
+									"type": "DateTimeOffset"
+								}
+							},
+							null
 						]
 					}
 				},
