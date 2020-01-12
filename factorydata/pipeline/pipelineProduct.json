@@ -36,17 +36,8 @@
 						"mappings": [
 							{
 								"source": {
-									"name": ""
-								},
-								"sink": {
-									"name": "PartitionKey",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
 									"name": "ProductID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "RowKey",
@@ -54,15 +45,9 @@
 								}
 							},
 							{
-								"sink": {
-									"name": "Timestamp",
-									"type": "DateTimeOffset"
-								}
-							},
-							{
 								"source": {
 									"name": "CategoryID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "CategoryID",
@@ -72,7 +57,7 @@
 							{
 								"source": {
 									"name": "Discontinued",
-									"type": "String"
+									"type": "Boolean"
 								},
 								"sink": {
 									"name": "Discontinued",
@@ -102,7 +87,7 @@
 							{
 								"source": {
 									"name": "ReorderLevel",
-									"type": "String"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "ReorderLevel",
@@ -112,7 +97,7 @@
 							{
 								"source": {
 									"name": "SupplierID",
-									"type": "String"
+									"type": "Int32"
 								},
 								"sink": {
 									"name": "SupplierID",
@@ -122,7 +107,7 @@
 							{
 								"source": {
 									"name": "UnitPrice",
-									"type": "String"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "UnitPrice",
@@ -132,7 +117,7 @@
 							{
 								"source": {
 									"name": "UnitsInStock",
-									"type": "String"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "UnitsInStock",
@@ -142,7 +127,7 @@
 							{
 								"source": {
 									"name": "UnitsOnOrder",
-									"type": "String"
+									"type": "Double"
 								},
 								"sink": {
 									"name": "UnitsOnOrder",
