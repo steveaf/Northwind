@@ -19,7 +19,8 @@
 						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureFileStorageReadSettings",
-							"recursive": true
+							"recursive": false,
+							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSettings"
@@ -27,7 +28,8 @@
 					},
 					"sink": {
 						"type": "AzureTableSink",
-						"azureTableInsertType": "merge",
+						"azureTableInsertType": "replace",
+						"azureTableDefaultPartitionKeyValue": "1",
 						"writeBatchSize": 10000
 					},
 					"enableStaging": false,
