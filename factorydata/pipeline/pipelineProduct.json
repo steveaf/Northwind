@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "pipelineProduct",
 	"properties": {
 		"activities": [
 			{
@@ -36,8 +36,7 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "ProductID",
-									"type": "String"
+									"name": ""
 								},
 								"sink": {
 									"name": "PartitionKey",
@@ -167,6 +166,12 @@
 				]
 			}
 		],
+		"parameters": {
+			"OrderGroupID": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
 		"annotations": []
 	}
 }
