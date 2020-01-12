@@ -1,0 +1,167 @@
+{
+	"name": "Product_to_AzureTable",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureFileStorageReadSettings",
+							"recursive": false,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureTableSink",
+						"azureTableInsertType": "merge",
+						"azureTableDefaultPartitionKeyValue": {
+							"value": "@pipeline().parameters.ProductGroupID",
+							"type": "Expression"
+						},
+						"writeBatchSize": 10000
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CategoryID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CategoryID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Discontinued",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Discontinued",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ProductName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "QuantityPerUnit",
+									"type": "String"
+								},
+								"sink": {
+									"name": "QuantityPerUnit",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ReorderLevel",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ReorderLevel",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SupplierID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SupplierID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitPrice",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UnitPrice",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitsInStock",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UnitsInStock",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "UnitsOnOrder",
+									"type": "String"
+								},
+								"sink": {
+									"name": "UnitsOnOrder",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "NTCL_Product",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureTable_Product",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"ProductGroupID": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
+		"annotations": []
+	}
+}
